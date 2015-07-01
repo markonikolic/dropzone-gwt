@@ -1,10 +1,41 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>twocentsforthoughts</groupId>
+	<groupId>com.github.andrezimmermann</groupId>
 	<artifactId>dropzone-gwt</artifactId>
-	<version>0.0.1</version>
-	<name>dropzone.js gwt wrapper</name>
+	<version>0.0.3</version>
+
+
+	<name>Dropzone-GWT</name>
+	<description>This is a dropzone.js GWT wrapper, production ready</description>
+	<url>https://github.com/andrezimmermann/dropzone-gwt</url>
+
+	<properties>
+		<gwt.version>2.7.0</gwt.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<name>André Zimmermann</name>
+			<email>andrezimmermann@email.com</email>
+			<organization>André Zimmermann</organization>
+			<organizationUrl>https://github.com/andrezimmermann</organizationUrl>
+		</developer>
+	</developers>
+
+	<scm>
+		<url>https://github.com/andrezimmermann/dropzone-gwt</url>
+		<connection>scm:git:git://github.com/andrezimmermann/dropzone-gwt.git</connection>
+		<developerConnection>scm:git:git@github.com:andrezimmermann/dropzone-gwt.git</developerConnection>
+	</scm>
 
 	<profiles>
 		<profile>
@@ -23,14 +54,26 @@
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-servlet</artifactId>
-			<version>2.6.1</version>
+			<version>${gwt.version}</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.google.gwt</groupId>
 			<artifactId>gwt-user</artifactId>
-			<version>2.6.1</version>
+			<version>${gwt.version}</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.google.gwt</groupId>
+			<artifactId>gwt-dev</artifactId>
+			<version>${gwt.version}</version>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
 
@@ -41,8 +84,8 @@
 			</resource>
 
 			<resource>
-				<directory>src/main/java/com/twocentsforthoughts/dropzone/client/injector/resources</directory>
-				<targetPath>com/twocentsforthoughts/dropzone/client/injector/resources</targetPath>
+				<directory>src/main/java/com/github/andrezimmermann/dropzone/client/injector/resources</directory>
+				<targetPath>com/github/andrezimmermann/dropzone/client/injector/resources</targetPath>
 				<excludes>
 					<exclude>*.java</exclude>
 				</excludes>
@@ -62,6 +105,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.3</version>
 				<executions>
 					<execution>
 						<id>attach-javadocs</id>
@@ -82,6 +126,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
+				<version>2.4</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
@@ -95,7 +140,7 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>gwt-maven-plugin</artifactId>
-				<version>2.6.1</version>
+				<version>${gwt.version}</version>
 				<executions>
 					<execution>
 						<goals>
@@ -103,6 +148,25 @@
 						</goals>
 					</execution>
 				</executions>
+				<configuration>
+					<!-- See https://jira.codehaus.org/browse/MGWT-382 -->
+					<finalName>${project.build.finalName}</finalName>
+				</configuration>
+			</plugin>
+
+
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.6</version>
+				<configuration>
+					<additionalClasspathElements>
+						<additionalClasspathElement>${project.build.sourceDirectory}</additionalClasspathElement>
+						<additionalClasspathElement>${project.build.testSourceDirectory}</additionalClasspathElement>
+					</additionalClasspathElements>
+					<useSystemClassLoader>true</useSystemClassLoader>
+					<useManifestOnlyJar>false</useManifestOnlyJar>
+					<forkMode>always</forkMode>
+				</configuration>
 			</plugin>
 		</plugins>
 		<pluginManagement>
@@ -142,6 +206,4 @@
 			</plugins>
 		</pluginManagement>
 	</build>
-
-
 </project>
